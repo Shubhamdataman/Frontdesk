@@ -1,0 +1,72 @@
+/* **********************DM Text Input Field********************** */
+.dm-text-input-field {
+  /* width: 15%; */
+  display: inline-block;
+}
+.dm-text-input-formHelperText {
+  /* float: right;
+  display: flex;
+  flex-direction: row; */
+  justify-content: flex-end;
+  display: flex;
+}
+/* ********************END DM Text Input Field******************** */
+/* *************************DM Text Area************************** */
+.dm-text-area{
+    display: inline-block;
+}
+.dm-text-area-formHelperText {
+    justify-content: flex-end;
+    display: flex;
+  }
+/* *********************END DM Text Area************************** */
+/* *********************DM DropdownXList************************** */
+.dm-textfield-dropdown{
+  display:flex;
+  width:fit-content;
+  width: 100%;
+  position: relative;
+}
+
+.dm-textfield-dropdown div:nth-child(1){
+  width: 100%;
+}
+
+.dm-textfield-dropdown-arrow {
+  position: absolute;
+  padding: 2px 21px 2px 21px;
+  margin-left: calc(100% - 70px);
+}
+
+.dm-dropdown-arrow-container{
+  width: 300px;
+  float: right;
+  margin-top: 5%;
+}
+.dm-dropdown-arrow-container > div.MuiBox-root{
+  width: calc(100% - 20px) !important;
+  padding: 10px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 0px 5px #ccc;
+}
+
+.dm-dropdown-arrow-container > div.MuiBox-root > div.MuiOutlinedInput-root{
+  width:100px !important;
+}
+.dm-dropdown-arrow-container > div.MuiBox-root > div.MuiTextField-root{
+  width:calc(100% - 114px) !important;
+}
+
+.dm-dropdown-arrow-container > div.MuiBox-root > ul{
+  width: 100% !important;
+}
+
+.dm-dropdown-arrow-container > div.MuiBox-root > ul li:nth-child(2n+1){
+  background-color: #f5f5f5;
+}
+/* *****************END DM DropdownXList************************** */
+
+.action:hover{
+  cursor: pointer;
+}
+
