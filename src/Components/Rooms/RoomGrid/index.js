@@ -122,7 +122,7 @@ export function RoomGrid() {
   console.log("filteredRoomData", filteredRoomData);
 
   return (
-    <Paper sx={{ p: 3, borderRadius: 2}}>
+    <Paper sx={{ p: 3, borderRadius: 2 }}>
       <Typography variant="h6" sx={{ mb: 3 }}>
         Room Status Overview
       </Typography>
@@ -207,6 +207,8 @@ export function RoomGrid() {
             <Box sx={statusBoxStyles("#FFC107")}>Occupied</Box>
             <Box sx={statusBoxStyles("#4CAF50")}>Available</Box>
             <Box sx={statusBoxStyles("#FF6B35")}>Dirty</Box>
+            <Box sx={statusBoxStyles("#87CEEB")}>OutOfOrder</Box>
+            <Box sx={statusBoxStyles("purple")}>Block</Box>
           </Box>
           <Divider sx={{ mb: 2 }} />
 
@@ -263,15 +265,19 @@ export function RoomGrid() {
                       flexDirection: "column",
                       alignItems: "center",
                       justifyContent: "center",
-                      
+
                       fontSize: 14,
                       fontWeight: "bold",
                       backgroundColor:
-                        room.status === "Available"
+                        room.status === "Clean"
                           ? "#4CAF50"
                           : room.status === "Occupied"
                           ? "#FFC107"
-                          : "#FF6B35",
+                          : room.status === "Dirty"
+                          ? "#FF6B35"
+                          : room.status === "Outoforder"
+                          ? "#87CEEB"
+                          : "purple",
                       color: "#fff",
                       position: "relative",
                       cursor:

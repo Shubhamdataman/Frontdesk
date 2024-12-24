@@ -1,54 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { LineChart } from "@mui/x-charts/LineChart";
-const DashboardPriceGraph = () => {
-  const sampleData = [
-    { date: "1-Jan-2024", revenue: 800, refunds: 100, billToCompany: 300 },
-    { date: "2 Jan 2024", revenue: 700, refunds: 300, billToCompany: 250 },
-    { date: "3 Jan 2024", revenue: 600, refunds: 250, billToCompany: 280 },
-    { date: "4 Jan 2024", revenue: 850, refunds: 300, billToCompany: 400 },
-    { date: "5 Jan 2024", revenue: 750, refunds: 200, billToCompany: 320 },
-    { date: "6 Jan 2024", revenue: 900, refunds: 350, billToCompany: 450 },
-    { date: "7 Jan 2024", revenue: 650, refunds: 220, billToCompany: 300 },
-    { date: "8 Jan 2024", revenue: 800, refunds: 100, billToCompany: 300 },
-    { date: "9 Jan 2024", revenue: 700, refunds: 300, billToCompany: 250 },
-    { date: "10 Jan 2024", revenue: 600, refunds: 250, billToCompany: 280 },
-    { date: "11 Jan 2024", revenue: 850, refunds: 300, billToCompany: 400 },
-    { date: "12 Jan 2024", revenue: 750, refunds: 200, billToCompany: 320 },
-    { date: "13 Jan 2024", revenue: 900, refunds: 350, billToCompany: 450 },
-    { date: "14 Jan 2024", revenue: 650, refunds: 220, billToCompany: 300 },
-    { date: "15 Jan 2024", revenue: 800, refunds: 100, billToCompany: 300 },
-    { date: "16 Jan 2024", revenue: 700, refunds: 300, billToCompany: 250 },
-    { date: "17 Jan 2024", revenue: 600, refunds: 250, billToCompany: 280 },
-    { date: "18 Jan 2024", revenue: 850, refunds: 300, billToCompany: 400 },
-    { date: "19 Jan 2024", revenue: 750, refunds: 200, billToCompany: 320 },
-    { date: "20 Jan 2024", revenue: 900, refunds: 350, billToCompany: 450 },
-    { date: "21 Jan 2024", revenue: 650, refunds: 220, billToCompany: 300 },
-    { date: "22 Jan 2024", revenue: 800, refunds: 100, billToCompany: 300 },
-    { date: "23 Jan 2024", revenue: 700, refunds: 300, billToCompany: 250 },
-    { date: "24 Jan 2024", revenue: 600, refunds: 250, billToCompany: 280 },
-    { date: "25 Jan 2024", revenue: 850, refunds: 300, billToCompany: 400 },
-    { date: "26 Jan 2024", revenue: 750, refunds: 200, billToCompany: 320 },
-    { date: "27 Jan 2024", revenue: 900, refunds: 350, billToCompany: 450 },
-    { date: "28 Jan 2024", revenue: 650, refunds: 220, billToCompany: 300 },
-    { date: "29 Jan 2024", revenue: 750, refunds: 200, billToCompany: 320 },
-    { date: "30 Jan 2024", revenue: 900, refunds: 350, billToCompany: 450 },
-    { date: "31 Jan 2024", revenue: 650, refunds: 220, billToCompany: 300 },
-  ];
 
-  const [data, setData] = useState(sampleData);
+const DashboardPriceGraph = () => {
+  const [data, setData] = useState([]);
   const [totalRevenue, setTotalRevenue] = useState(0);
   const [totalRefunds, setTotalRefunds] = useState(0);
   const [totalBillToCompany, setTotalBillToCompany] = useState(0);
+  const [month, setMonth] = useState("");
 
+  // Fetch financial data from the API
   useEffect(() => {
-    const revenue = data.reduce((sum, day) => sum + day.revenue, 0);
-    const refunds = data.reduce((sum, day) => sum + day.refunds, 0);
-    const billToCompany = data.reduce((sum, day) => sum + day.billToCompany, 0);
-    setTotalRevenue(revenue);
-    setTotalRefunds(refunds);
-    setTotalBillToCompany(billToCompany);
-  }, [data]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://192.168.6.13:3030/api/dashboard/financialAmount");
+        const result = await response.json();
+        
+        // Format the data
+        const formattedData = result.map((item) => ({
+          date: item.day,
+          revenue: item.recAmt,
+          refunds: item.refundAmt,
+          billToCompany: item.billToComp,
+        }));
+        
+        setData(formattedData);
+
+        // Calculate totals
+        const totalRevenue = formattedData.reduce((sum, day) => sum + day.revenue, 0);
+        const totalRefunds = formattedData.reduce((sum, day) => sum + day.refunds, 0);
+        const totalBillToCompany = formattedData.reduce((sum, day) => sum + day.billToCompany, 0);
+
+        setTotalRevenue(totalRevenue);
+        setTotalRefunds(totalRefunds);
+        setTotalBillToCompany(totalBillToCompany);
+
+        if (formattedData.length > 0) {
+          const firstDate = new Date(formattedData[0].date);
+          console.log("firstDate",firstDate);
+          const monthName = firstDate.toLocaleString("default", {
+            month: "long",
+          });
+          setMonth(monthName);
+        }
+      } catch (error) {
+        console.error("Error fetching financial data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <Card
@@ -64,7 +65,7 @@ const DashboardPriceGraph = () => {
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Box>
           <Typography variant="h5" sx={{ color: "#000" }}>
-            Financial Statistics
+            Financial Statistics for <span style={{fontWeight:"bold",color:"brown"}}>{month}</span>
           </Typography>
           <Typography variant="body2" sx={{ color: "#000" }}>
             Monthly received, refunds, and bill to company overview
@@ -72,11 +73,11 @@ const DashboardPriceGraph = () => {
         </Box>
         <Box sx={{ display: "flex", gap: 4 }}>
           <Box>
-            <Typography variant="h4" sx={{ color: "#2196f3" }}>
+            <Typography variant="h4" sx={{ color: "#00FF00" }}>
               ₹{totalRevenue.toLocaleString()}
             </Typography>
             <Typography variant="body2" sx={{ color: "rgb(148, 163, 184)" }}>
-              Revenue
+              Received
             </Typography>
           </Box>
           <Box>
@@ -104,7 +105,7 @@ const DashboardPriceGraph = () => {
           series={[
             {
               data: data.map((item) => item.revenue),
-              label: "Revenue",
+              label: "Received",
               color: "#00FF00",
               curve: "natural",
             },
@@ -123,11 +124,12 @@ const DashboardPriceGraph = () => {
           ]}
           xAxis={[
             {
-              data: data.map((item) => item.date),
+              data: data.map((_, index) => index + 1), // Sequential numbers: 1, 2, 3, ...
               scaleType: "point",
-              valueFormatter: (value) => value, // Display dates as is
+              valueFormatter: (value) => value.toString(), 
             },
           ]}
+         
           sx={{
             ".MuiLineElement-root": {
               strokeWidth: 2,
