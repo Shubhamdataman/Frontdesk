@@ -13,9 +13,11 @@ const DashboardPriceGraph = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://192.168.6.13:3030/api/dashboard/financialAmount");
+        const response = await fetch(
+          "http://192.168.6.13:3030/api/dashboard/financialAmount"
+        );
         const result = await response.json();
-        
+
         // Format the data
         const formattedData = result.map((item) => ({
           date: item.day,
@@ -23,13 +25,22 @@ const DashboardPriceGraph = () => {
           refunds: item.refundAmt,
           billToCompany: item.billToComp,
         }));
-        
+
         setData(formattedData);
 
         // Calculate totals
-        const totalRevenue = formattedData.reduce((sum, day) => sum + day.revenue, 0);
-        const totalRefunds = formattedData.reduce((sum, day) => sum + day.refunds, 0);
-        const totalBillToCompany = formattedData.reduce((sum, day) => sum + day.billToCompany, 0);
+        const totalRevenue = formattedData.reduce(
+          (sum, day) => sum + day.revenue,
+          0
+        );
+        const totalRefunds = formattedData.reduce(
+          (sum, day) => sum + day.refunds,
+          0
+        );
+        const totalBillToCompany = formattedData.reduce(
+          (sum, day) => sum + day.billToCompany,
+          0
+        );
 
         setTotalRevenue(totalRevenue);
         setTotalRefunds(totalRefunds);
@@ -37,7 +48,7 @@ const DashboardPriceGraph = () => {
 
         if (formattedData.length > 0) {
           const firstDate = new Date(formattedData[0].date);
-          console.log("firstDate",firstDate);
+          console.log("firstDate", firstDate);
           const monthName = firstDate.toLocaleString("default", {
             month: "long",
           });
@@ -50,7 +61,7 @@ const DashboardPriceGraph = () => {
 
     fetchData();
   }, []);
-
+  console.log("graph Record", data);
   return (
     <Card
       sx={{
@@ -65,7 +76,8 @@ const DashboardPriceGraph = () => {
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
         <Box>
           <Typography variant="h5" sx={{ color: "#000" }}>
-            Financial Statistics for <span style={{fontWeight:"bold",color:"brown"}}>{month}</span>
+            Financial Statistics for{" "}
+            <span style={{ fontWeight: "bold", color: "brown" }}>{month}</span>
           </Typography>
           <Typography variant="body2" sx={{ color: "#000" }}>
             Monthly received, refunds, and bill to company overview
@@ -126,10 +138,9 @@ const DashboardPriceGraph = () => {
             {
               data: data.map((_, index) => index + 1), // Sequential numbers: 1, 2, 3, ...
               scaleType: "point",
-              valueFormatter: (value) => value.toString(), 
+              valueFormatter: (value) => value.toString(),
             },
           ]}
-         
           sx={{
             ".MuiLineElement-root": {
               strokeWidth: 2,

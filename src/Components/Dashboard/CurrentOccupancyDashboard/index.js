@@ -5,6 +5,7 @@ import { RoomGrid } from "../../Rooms/RoomGrid";
 import CustomerSatisfaction from "../../CustomerSatisfaction";
 import { StaffSchedule } from "../../StaffSchedule";
 import DashboardPriceGraph from "../../DashboardPriceGraph";
+import Checkincheckout from "../../Checkincheckout";
 
 const CurrentOccupancyDashboard = () => {
   return (
@@ -44,9 +45,16 @@ const CurrentOccupancyDashboard = () => {
             <Card sx={{ mb: 3, boxShadow: 3 }}>
               <CustomerSatisfaction />
             </Card>
-            <Card sx={{ p: 2, boxShadow: 3 }}>
-              <StaffSchedule />
+            <Card sx={{mb:2}}>
+                  <Checkincheckout/>
             </Card>
+           
+            <Card sx={{ minHeight:"465px",borderRadius:"10px"}}>
+             
+              <StaffSchedule />
+            
+            </Card>
+          
           </Grid>
         </Grid>
 

@@ -16,26 +16,34 @@ export function OverviewCards() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentDate, setCurrentDate] = useState("");
   const navigate = useNavigate();
   const ApiUrl = process.env.REACT_APP_DATABASE_URL;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(`${ApiUrl}/api/dashboard/counts?currDate=2024-12-24`);
- 
-        setData(response.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchData();
+  useEffect(() => {
+    const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    setCurrentDate(today);
   }, []);
+  useEffect(() => {
+    if (currentDate) {
+      const fetchData = async () => {
+        try {
+          setLoading(true);
+          const response = await axios.get(`${ApiUrl}/api/dashboard/counts?currDate=${currentDate}`);
+          setData(response.data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [currentDate]);
+
   console.log("DATA1",data);
+  console.log("currentdate",currentDate);
 
   const cards = data
   ? [

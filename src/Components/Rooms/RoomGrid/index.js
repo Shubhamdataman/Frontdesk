@@ -21,6 +21,7 @@ import {
   Radio,
 } from "@mui/material";
 import BedIcon from "@mui/icons-material/Bed";
+import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import axios from "axios";
 import shubham from "./skk.jpeg";
 
@@ -290,6 +291,9 @@ export function RoomGrid() {
                     {room.status === "Occupied" && (
                       <BedIcon sx={{ fontSize: 18 }} />
                     )}
+                      {room.status === "Dirty" && (
+                      <CleaningServicesIcon sx={{ fontSize: 18 }} />
+                    )}
                   </Box>
                 </Tooltip>
               ))}
@@ -364,7 +368,8 @@ export function RoomGrid() {
                         style={{
                           width: "100%",
                           height: "100%",
-                          objectFit: "cover",
+                          objectFit: "contain",
+                          
                         }}
                       />
                     </Box>

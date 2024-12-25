@@ -31,7 +31,7 @@ export function FloorWiseRooms() {
   const [guestDetails, setGuestDetails] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [filterType, setFilterType] = useState("Double");
-  const ApiUrl = process.env.REACT_APP_DATABASE_URL
+  const ApiUrl = process.env.REACT_APP_DATABASE_URL;
 
   console.log(filterType);
 
@@ -75,7 +75,7 @@ export function FloorWiseRooms() {
       setLoading(true);
       try {
         const response = await axios.get(
-            `${ApiUrl}/api/dashboard/floor-wise-rooms`
+          `${ApiUrl}/api/dashboard/floor-wise-rooms`
         );
         const data = response.data;
         setRoomData(
@@ -207,6 +207,8 @@ export function FloorWiseRooms() {
             <Box sx={statusBoxStyles("#FFC107")}>Occupied</Box>
             <Box sx={statusBoxStyles("#4CAF50")}>Available</Box>
             <Box sx={statusBoxStyles("#FF6B35")}>Dirty</Box>
+            <Box sx={statusBoxStyles("#87CEEB")}>OutOfOrder</Box>
+            <Box sx={statusBoxStyles("purple")}>Block</Box>
           </Box>
           <Divider sx={{ mb: 2 }} />
 
@@ -254,7 +256,8 @@ export function FloorWiseRooms() {
                   <Box
                     onClick={() =>
                       room.status === "Occupied" &&
-                      handleOccupiedRoomClick(room.doc_id)
+                      handleOccupiedRoomClick(room.docId)
+                 
                     }
                     sx={{
                       width: 80,
@@ -266,11 +269,15 @@ export function FloorWiseRooms() {
                       fontSize: 14,
                       fontWeight: "bold",
                       backgroundColor:
-                        room.status === "Available"
+                        room.status === "Clean"
                           ? "#4CAF50"
                           : room.status === "Occupied"
                           ? "#FFC107"
-                          : "#FF6B35",
+                          : room.status === "Dirty"
+                          ? "#FF6B35"
+                          : room.status === "Outoforder"
+                          ? "#87CEEB"
+                          : "purple",
                       color: "#fff",
                       position: "relative",
                       cursor:
