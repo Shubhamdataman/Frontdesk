@@ -23,7 +23,7 @@ export default function CheckinCheckout() {
     if (currentDate) {
 
       axios
-        .get(`${ApiUrl}/api/dashboard/counts?currDate=2024-12-24`) 
+        .get(`${ApiUrl}/api/dashboard/counts?currDate=${currentDate}`) 
         .then((response) => {
           const data = response.data;
 
