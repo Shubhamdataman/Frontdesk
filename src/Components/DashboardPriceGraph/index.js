@@ -8,13 +8,14 @@ const DashboardPriceGraph = () => {
   const [totalRefunds, setTotalRefunds] = useState(0);
   const [totalBillToCompany, setTotalBillToCompany] = useState(0);
   const [month, setMonth] = useState("");
+  const ApiUrl = process.env.REACT_APP_DATABASE_URL;
 
   // Fetch financial data from the API
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          "http://192.168.6.13:3030/api/dashboard/financialAmount"
+          `${ApiUrl}/api/dashboard/financialAmount`
         );
         const result = await response.json();
 

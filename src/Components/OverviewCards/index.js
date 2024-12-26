@@ -23,6 +23,7 @@ export function OverviewCards() {
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0]; // 'YYYY-MM-DD'
+    
     setCurrentDate(today);
   }, []);
   useEffect(() => {

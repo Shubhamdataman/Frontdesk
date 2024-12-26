@@ -9,6 +9,7 @@ export default function CheckinCheckout() {
     { id: 2, label: "Check Out", value: 0, color: "#FFB766" },
   ]);
   const [currentDate, setCurrentDate] = useState("");
+  const ApiUrl = process.env.REACT_APP_DATABASE_URL;
 
  
   useEffect(() => {
@@ -22,7 +23,7 @@ export default function CheckinCheckout() {
     if (currentDate) {
 
       axios
-        .get(`http://192.168.6.13:3030/api/dashboard/counts?currDate=2024-12-24`) 
+        .get(`${ApiUrl}/api/dashboard/counts?currDate=2024-12-24`) 
         .then((response) => {
           const data = response.data;
 

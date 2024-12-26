@@ -16,12 +16,13 @@ import axios from "axios";
 export function StaffSchedule() {
   const [staffMembers, setStaffMembers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const ApiUrl = process.env.REACT_APP_DATABASE_URL;
 
   useEffect(() => {
     const fetchStaffData = async () => {
       try {
         const response = await axios.get(
-          "http://192.168.6.13:3030/api/dashboard/staff-schedule"
+          `${ApiUrl}/api/dashboard/staff-schedule`
         );
         setStaffMembers(response.data);
       } catch (error) {
