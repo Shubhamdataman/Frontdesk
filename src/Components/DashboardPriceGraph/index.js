@@ -61,6 +61,9 @@ const DashboardPriceGraph = () => {
     };
 
     fetchData();
+
+    // const interval = setInterval(fetchData, 60000);
+    // return () => clearInterval(interval);
   }, []);
   console.log("graph Record", data);
   return (

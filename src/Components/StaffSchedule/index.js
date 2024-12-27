@@ -32,6 +32,8 @@ export function StaffSchedule() {
       }
     };
     fetchStaffData();
+    // const interval = setInterval(fetchStaffData, 60000);
+    // return () => clearInterval(interval);
   }, []);
   console.log("Staff",staffMembers);
 

@@ -27,6 +27,8 @@ export default function CustomerSatisfaction() {
     };
 
     fetchRoomStatus();
+    // const interval = setInterval(fetchRoomStatus, 60000);
+    // return () => clearInterval(interval);
   }, []);
 
   if (loading) {

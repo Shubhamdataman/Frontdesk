@@ -1,6 +1,6 @@
 import { Box, Card, Grid, Typography } from "@mui/material";
 import React from "react";
-import { OverviewCards } from "../../OverviewCards";
+import {OverviewCards} from "../../OverviewCards";
 import { RoomGrid } from "../../Rooms/RoomGrid";
 import CustomerSatisfaction from "../../CustomerSatisfaction";
 import { StaffSchedule } from "../../StaffSchedule";

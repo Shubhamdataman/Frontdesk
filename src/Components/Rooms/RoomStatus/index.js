@@ -19,15 +19,18 @@ export default function RoomStatus() {
         }
         const data = await response.json();
         setRoomStatus(data);
-        console.log("roomStatus", data); // Fixed log statement to show the fetched data
+        console.log("roomStatus", data); 
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
+    console.log("shubham Kumar Keshri");
     fetchRoomStatus();
+    
+  
+  
   }, []);
 
   if (loading) {

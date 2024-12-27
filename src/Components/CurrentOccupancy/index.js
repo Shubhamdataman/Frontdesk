@@ -292,7 +292,7 @@ const CurrentOccupancy = () => {
   console.log("houseKeepingData", housekeepingData);
   const handleRoomDetails = (room) => {
     setSelectedRoom(room);
-    fetchRoomDetails(room.regDocId); 
+    fetchRoomDetails(room.regDocId);
     setOpenDetails(true);
   };
   console.log("SelectedRoom:", selectedRoom);
@@ -307,27 +307,27 @@ const CurrentOccupancy = () => {
     {
       field: "actions",
       headerName: "Actions",
-      flex: 1,
+      width: 80,
       renderCell: (params) => (
         <IconButton onClick={() => handleRoomDetails(params.row)}>
           <ManageSearchIcon sx={{ color: "green" }} />
         </IconButton>
       ),
     },
-    { field: "roomNo", headerName: "Room No", flex: 1 },
-    { field: "guestName", headerName: "Guest Name", flex: 3 },
-    { field: "mobile", headerName: "Mobile", flex: 3 },
-    { field: "checkInDate", headerName: "Check-In Date", flex: 3 },
-    { field: "checkInTime", headerName: "Check-In Time", flex: 2 },
-    { field: "depDate", headerName: "Departure Date", flex: 3 },
-    { field: "categoryName", headerName: "Category", flex: 3 },
-    { field: "packageName", headerName: "Package", flex: 2 },
-    { field: "rate", headerName: "Rate", flex: 2 },
-    { field: "displayName", headerName: "Display Name", flex: 3 },
-    { field: "otaname", headerName: "OTA Name", flex: 2 },
-    { field: "reservationNo", headerName: "Reservation No", flex: 1 },
-    { field: "grcNo", headerName: "GRC No", flex: 1 },
-    { field: "pax", headerName: "Pax", flex: 1 },
+    { field: "roomNo", headerName: "Room No", width: 80 },
+    { field: "guestName", headerName: "Guest Name", width: 150 },
+    { field: "mobile", headerName: "Mobile", width: 120 },
+    { field: "checkInDate", headerName: "Check-In Date", width: 120 },
+    { field: "checkInTime", headerName: "Check-In Time", width: 100 },
+    { field: "depDate", headerName: "Departure Date", width: 120 },
+    { field: "categoryName", headerName: "Category", width: 120 },
+    { field: "packageName", headerName: "Package", width: 120 },
+    { field: "rate", headerName: "Rate", width: 90 },
+    { field: "displayName", headerName: "Display Name", width: 120 },
+    { field: "otaname", headerName: "OTA Name", width: 100 },
+    { field: "reservationNo", headerName: "Reservation No", width: 150 },
+    { field: "grcNo", headerName: "GRC No", width: 150 },
+    { field: "pax", headerName: "Pax", width: 90 },
   ];
   const calculateGrandTotal = () => {
     const roomServiceTotal = roomServiceData.reduce(
@@ -407,11 +407,14 @@ const CurrentOccupancy = () => {
           ))}
         </Grid>
       ) : (
-        <Box sx={{ height: 465 }}>
+        <Box sx={{ width: 950 }}>
           <DataGrid
             rows={occupancyData}
             columns={columns}
             getRowId={(row) => row.code}
+            pageSizeOptions={[5, 25, 40, 50]} // Options for page size
+            paginationModel={{ pageSize: 5, page: 0 }} // Default page size and initial page
+            pagination // Enables pagination
             sx={{ overflow: "auto" }}
           />
         </Box>
@@ -480,7 +483,7 @@ const CurrentOccupancy = () => {
                           <TableCell>{service.vrNo}</TableCell>
                           <TableCell>{service.service}</TableCell>
                           <TableCell align="right">
-                          ₹{service.total.toFixed(2)}
+                            ₹{service.total.toFixed(2)}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -490,7 +493,8 @@ const CurrentOccupancy = () => {
                         </TableCell>
                         <TableCell align="right">
                           <strong>
-                          ₹{roomServiceData
+                            ₹
+                            {roomServiceData
                               .reduce(
                                 (total, service) => total + service.total,
                                 0
@@ -533,7 +537,7 @@ const CurrentOccupancy = () => {
                           <TableCell>{service.vrNo}</TableCell>
                           <TableCell>{service.service}</TableCell>
                           <TableCell align="right">
-                          ₹{service.total.toFixed(2)}
+                            ₹{service.total.toFixed(2)}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -543,7 +547,8 @@ const CurrentOccupancy = () => {
                         </TableCell>
                         <TableCell align="right">
                           <strong>
-                          ₹{housekeepingData
+                            ₹
+                            {housekeepingData
                               .reduce(
                                 (total, service) => total + service.total,
                                 0
@@ -570,7 +575,6 @@ const CurrentOccupancy = () => {
                   borderRadius: 1,
                 }}
               >
-                
                 <Typography
                   variant="body1"
                   sx={{ fontWeight: "bold", color: "#333" }}

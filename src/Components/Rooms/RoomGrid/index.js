@@ -67,6 +67,8 @@ export function RoomGrid() {
     };
 
     fetchRoomData();
+    // const interval = setInterval(fetchRoomData, 60000);
+    // return () => clearInterval(interval);
   }, []);
 
   // Fetch room data for the selected room type
@@ -91,6 +93,8 @@ export function RoomGrid() {
     };
 
     fetchRoomDataForSelectedType();
+    // const interval = setInterval(fetchRoomDataForSelectedType, 60000);
+    // return () => clearInterval(interval);
   }, [selectedRoom]);
 
   console.log("selectedroomdata", roomData);

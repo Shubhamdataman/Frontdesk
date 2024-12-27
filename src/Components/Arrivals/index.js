@@ -43,19 +43,22 @@ const Arrivals = () => {
     };
 
     fetchArrivals();
+         
+    
+
   }, []);
 
   const columns = [
     { field: "roomNo", headerName: "Room No", flex: 1 },
-    { field: "guestName", headerName: "Guest Name", flex: 1 },
-    { field: "roomCategory", headerName: "Room Category", flex: 1 },
-    { field: "packageName", headerName: "Package Name", flex: 1 },
-    { field: "reservationNo", headerName: "Reservation No", flex: 1 },
-    { field: "grcNo", headerName: "GRC No", flex: 1 },
-    { field: "gidNo", headerName: "GID No", flex: 1 },
-    { field: "organization", headerName: "Organization", flex: 1 },
-    { field: "arrivalDate", headerName: "Arrival Date", flex: 1 },
-    { field: "city", headerName: "City", flex: 1 },
+    { field: "guestName", headerName: "Guest Name", flex: 2 },
+    { field: "roomCategory", headerName: "Room Category", flex: 2 },
+    { field: "packageName", headerName: "Package Name", flex: 2 },
+    { field: "reservationNo", headerName: "Reservation No", flex: 2 },
+    { field: "grcNo", headerName: "GRC No", flex: 2 },
+    { field: "gidNo", headerName: "GID No", flex: 2 },
+    { field: "organization", headerName: "Organization", flex: 2 },
+    { field: "arrivalDate", headerName: "Arrival Date", flex: 2 },
+    { field: "city", headerName: "City", flex: 2 },
   ];
 
   const rows = arrivals.map((item, index) => ({
