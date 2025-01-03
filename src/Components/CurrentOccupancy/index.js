@@ -242,18 +242,16 @@ const CurrentOccupancy = () => {
   const [loadingDetails, setLoadingDetails] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
-  const [roomServiceData, setRoomServiceData] = useState([
-    { vrNo: "101", date: "2024-12-01", service: "Mini Bar", total: 30.0 },
-    { vrNo: "102", date: "2024-12-02", service: "Mini Bar2", total: 99.0 },
-  ]);
-  const [housekeepingData, setHousekeepingData] = useState([
-    { vrNo: "201", date: "2024-12-01", service: "Laundry", total: 15.0 },
-    { vrNo: "202", date: "2024-12-01", service: "Laundry", total: 25.0 },
-    { vrNo: "203", date: "2024-12-01", service: "Laundry", total: 15.0 },
-  ]);
+  const [roomServiceData, setRoomServiceData] = useState([]);
+  const [housekeepingData, setHousekeepingData] = useState([]);
+  const [paymentReceived, setPaymentReceived] = useState([]);
+  const [roomPackage,setRoomPackage]=useState(0);
+  const [pendingAmount,setPendingAmount]=useState(0)
   const isMobile = useMediaQuery("(max-width:1100px)");
   const ApiUrl = process.env.REACT_APP_DATABASE_URL;
 
+  console.log("Roomservicedata", roomServiceData);
+  console.log("housekeepingData", housekeepingData);
   useEffect(() => {
     const fetchOccupancyData = async () => {
       try {
@@ -271,17 +269,20 @@ const CurrentOccupancy = () => {
     fetchOccupancyData();
   }, []);
 
-  const fetchRoomDetails = async (regDocId) => {
+  const fetchRoomDetails = async (regDocId,uhid) => {
     setLoadingDetails(true);
     try {
-      const roomServiceResponse = await axios.get(
-        `${ApiUrl}/api/services/getRoomService/${regDocId}`
+      const response = await axios.get(
+        `${ApiUrl}/api/dashboard/serviceDetails?regDocId=${regDocId}&uhid=${uhid}`
       );
-      const housekeepingResponse = await axios.get(
-        `${ApiUrl}/api/services/getHousekeeping/${regDocId}`
-      );
-      setRoomServiceData(roomServiceResponse.data);
-      setHousekeepingData(housekeepingResponse.data);
+      // const housekeepingResponse = await axios.get(
+      //   `${ApiUrl}/api/services/getHousekeeping/${regDocId}`
+      // );
+      setRoomServiceData(response.data.serviceDetails);
+      setHousekeepingData(response.data.housekeepingDetails);
+      setPaymentReceived(response.data.advancePayment);
+      setRoomPackage(response.data.totalRoomPackage);
+      setPendingAmount(response.data.totalPendingAmount);
     } catch (error) {
       console.error("Error fetching room details:", error);
     } finally {
@@ -292,7 +293,7 @@ const CurrentOccupancy = () => {
   console.log("houseKeepingData", housekeepingData);
   const handleRoomDetails = (room) => {
     setSelectedRoom(room);
-    fetchRoomDetails(room.regDocId);
+    fetchRoomDetails(room.regDocId,room.uhid);
     setOpenDetails(true);
   };
   console.log("SelectedRoom:", selectedRoom);
@@ -301,6 +302,15 @@ const CurrentOccupancy = () => {
     setSelectedRoom(null);
     setRoomServiceData([]);
     setHousekeepingData([]);
+  };
+
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: 5, // Default page size
+  });
+
+  const handlePaginationChange = (newModel) => {
+    setPaginationModel(newModel); // Update pagination model state
   };
 
   const columns = [
@@ -329,17 +339,18 @@ const CurrentOccupancy = () => {
     { field: "grcNo", headerName: "GRC No", width: 150 },
     { field: "pax", headerName: "Pax", width: 90 },
   ];
-  const calculateGrandTotal = () => {
-    const roomServiceTotal = roomServiceData.reduce(
-      (total, service) => total + service.total,
-      0
-    );
-    const housekeepingTotal = housekeepingData.reduce(
-      (total, service) => total + service.total,
-      0
-    );
-    return (roomServiceTotal + housekeepingTotal).toFixed(2);
-  };
+  // const calculateGrandTotal = () => {
+  //   const roomServiceTotal = roomServiceData.reduce(
+  //     (amount, service) => amount + service.amount,
+  //     0
+  //   );
+  //   const housekeepingTotal = housekeepingData.reduce(
+  //     (amount, service) => amount + service.amount,
+  //     0
+  //   );
+  //   return (roomServiceTotal + housekeepingTotal).toFixed(2);
+  // };
+
   return (
     <Box p={2}>
       <Typography variant="h6" sx={{ mb: 2 }}>
@@ -412,8 +423,9 @@ const CurrentOccupancy = () => {
             rows={occupancyData}
             columns={columns}
             getRowId={(row) => row.code}
-            pageSizeOptions={[5, 25, 40, 50]} // Options for page size
-            paginationModel={{ pageSize: 5, page: 0 }} // Default page size and initial page
+            pageSizeOptions={[5, 10, 40, 50]} // Options for rows per page
+            paginationModel={paginationModel} // Controlled pagination model
+            onPaginationModelChange={handlePaginationChange} // Update handler
             pagination // Enables pagination
             sx={{ overflow: "auto" }}
           />
@@ -470,25 +482,21 @@ const CurrentOccupancy = () => {
                       <TableRow>
                         <TableCell>S.No</TableCell>
                         <TableCell>Date</TableCell>
-                        <TableCell>Vr. No.</TableCell>
-                        <TableCell>Service</TableCell>
-                        <TableCell align="right">Total</TableCell>
+                        <TableCell>Service Name</TableCell>
+                        <TableCell>Amount</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {roomServiceData.map((service, index) => (
-                        <TableRow key={service.vrNo}>
+                        <TableRow key={index}>
                           <TableCell>{index + 1}</TableCell>
-                          <TableCell>{service.date}</TableCell>
-                          <TableCell>{service.vrNo}</TableCell>
-                          <TableCell>{service.service}</TableCell>
-                          <TableCell align="right">
-                            ₹{service.total.toFixed(2)}
-                          </TableCell>
+                          <TableCell>{service.serviceDate}</TableCell>
+                          <TableCell>{service.serviceName}</TableCell>
+                          <TableCell>₹{service.amount}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow>
-                        <TableCell colSpan={4} align="right">
+                        <TableCell colSpan={3} align="right">
                           <strong>Total:</strong>
                         </TableCell>
                         <TableCell align="right">
@@ -496,7 +504,7 @@ const CurrentOccupancy = () => {
                             ₹
                             {roomServiceData
                               .reduce(
-                                (total, service) => total + service.total,
+                                (amount, service) => amount + service.amount,
                                 0
                               )
                               .toFixed(2)}
@@ -524,25 +532,22 @@ const CurrentOccupancy = () => {
                       <TableRow>
                         <TableCell>S.No</TableCell>
                         <TableCell>Date</TableCell>
-                        <TableCell>Vr. No.</TableCell>
-                        <TableCell>Service</TableCell>
-                        <TableCell align="right">Total</TableCell>
+                        <TableCell>Service Name</TableCell>
+                        <TableCell>Amount</TableCell>
+                        {/* <TableCell align="right">Total</TableCell> */}
                       </TableRow>
                     </TableHead>
                     <TableBody>
                       {housekeepingData.map((service, index) => (
-                        <TableRow key={service.vrNo}>
+                        <TableRow key={index}>
                           <TableCell>{index + 1}</TableCell>
-                          <TableCell>{service.date}</TableCell>
-                          <TableCell>{service.vrNo}</TableCell>
-                          <TableCell>{service.service}</TableCell>
-                          <TableCell align="right">
-                            ₹{service.total.toFixed(2)}
-                          </TableCell>
+                          <TableCell>{service.serviceDate}</TableCell>
+                          <TableCell>{service.serviceName}</TableCell>
+                          <TableCell>₹{service.amount}</TableCell>
                         </TableRow>
                       ))}
                       <TableRow>
-                        <TableCell colSpan={4} align="right">
+                        <TableCell colSpan={3} align="right">
                           <strong>Total:</strong>
                         </TableCell>
                         <TableCell align="right">
@@ -550,7 +555,7 @@ const CurrentOccupancy = () => {
                             ₹
                             {housekeepingData
                               .reduce(
-                                (total, service) => total + service.total,
+                                (amount, service) => amount + service.amount,
                                 0
                               )
                               .toFixed(2)}
@@ -561,7 +566,37 @@ const CurrentOccupancy = () => {
                   </Table>
                 </TableContainer>
               </Paper>
-              {/* Grand Total */}
+
+               {/* Total Room Package */}
+               <Paper
+                elevation={2}
+                sx={{
+                  padding: 1,
+                  marginTop: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  backgroundColor: "#f9f9f9",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: 1,
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "bold", color: "#333" }}
+                >
+                  Total Room Package
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "bold", color: "#000" }}
+                >
+                  ₹
+                  {roomPackage.toFixed(2)}
+                </Typography>
+              </Paper>
+
+              {/* Total payment Received */}
               <Paper
                 elevation={2}
                 sx={{
@@ -579,13 +614,49 @@ const CurrentOccupancy = () => {
                   variant="body1"
                   sx={{ fontWeight: "bold", color: "#333" }}
                 >
-                  Grand Total
+                  Total payment Received
                 </Typography>
                 <Typography
                   variant="body1"
                   sx={{ fontWeight: "bold", color: "#4caf50" }}
                 >
-                  ₹{calculateGrandTotal()}
+                  ₹
+                  {paymentReceived
+                    .reduce(
+                      (totalPayment, service) =>
+                        totalPayment + service.totalPayment,
+                      0
+                    )
+                    .toFixed(2)}
+                </Typography>
+              </Paper>
+
+                {/*Pending Amount */}
+                <Paper
+                elevation={2}
+                sx={{
+                  padding: 1,
+                  marginTop: 2,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  backgroundColor: "#f9f9f9",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: 1,
+                }}
+              >
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "bold", color: "#333" }}
+                >
+                  Pending Amount
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ fontWeight: "bold", color: "red" }}
+                >
+                  ₹
+                  {pendingAmount.toFixed(2)}
                 </Typography>
               </Paper>
             </Box>

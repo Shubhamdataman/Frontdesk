@@ -45,7 +45,7 @@ const iconStyle={
 const dashboardSubItems = [
   {
     text: "Current Occupancy",
-    path: "/",
+    path: "/dashboard",
     icon: <HotelIcon  style={iconStyle}/>,
   },
   { text: "Reservation", path: "/dashboard/reservation", icon: <CalendarMonthIcon style={iconStyle}/> },

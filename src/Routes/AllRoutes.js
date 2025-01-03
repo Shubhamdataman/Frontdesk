@@ -18,11 +18,14 @@ import RoomChangeEntry from "../Components/Transactions/RoomChangeEntry"
 import RoomCheckOut from '../Components/Transactions/RoomCheckOut'
 import CheckOutBill from '../Components/Transactions/CheckOutBill'
 import RoomDisplayDashboard from "../Components/Dashboard/RoomDisplayDashboard/index.js";
+import Login from "../Components/Login"
 const AllRoutes = () => {
   return (
     <Routes>
       {/* dashboard */}
-      <Route path="/" element={<CurrentOccupancyDashboard/>}/>
+      <Route path="/dashboard" element={<CurrentOccupancyDashboard/>}/>
+      <Route path="/" element={<Login/>}/>
+      <Route path="/login" element={<Login/>}/>
       <Route path="dashboard/reservation" element={<ReservationDashboard/>}/>
       <Route path="dashboard/room-display" element={<RoomDisplayDashboard/>}/>
       {/* transactions */}

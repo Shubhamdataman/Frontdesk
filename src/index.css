@@ -13,3 +13,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.custom-toast {
+  width: 200px !important; /* Fixed width */
+  min-height: 20px !important; /* Minimum height */
+  padding: 10px !important; /* Inner padding */
+  border-radius: 8px !important; /* Rounded corners */
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important; /* Gradient */
+  color: #fff !important; /* Text color */
+  font-size: 16px !important; /* Font size */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important; /* Subtle shadow */
+  display: flex !important; /* Flexbox */
+  justify-content: center !important; /* Horizontal center */
+  align-items: center !important; /* Vertical center */
+}
+
